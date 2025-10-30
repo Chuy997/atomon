@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IT Room Sensor</title>
+
+  <!-- Reutiliza el mismo CSS moderno del dashboard -->
+  <link rel="stylesheet" href="../dashboard/styles_v2.css" />
+
+  <!-- Chart.js (puedes cambiar a tu copia local si prefieres) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <!-- App Bar -->
+  <header class="appbar">
+    <div class="brand">
+      <div class="dot" aria-hidden="true"></div>
+      <span class="title">IT Room · Ambiente</span>
+    </div>
+
+    <div class="actions">
+      <div class="segmented" role="group" aria-label="Rango de tiempo">
+        <button class="segmented-btn active" data-range="15" aria-pressed="true">15&nbsp;min</button>
+        <button class="segmented-btn" data-range="60" aria-pressed="false">1&nbsp;h</button>
+        <button class="segmented-btn" data-range="180" aria-pressed="false">3&nbsp;h</button>
+      </div>
+
+      <button id="btnRefresh" class="btn icon" title="Actualizar datos" aria-label="Actualizar">⟳</button>
+    </div>
+  </header>
+
+  <!-- Contenido -->
+  <main class="page">
+    <!-- KPIs -->
+    <section class="kpis" aria-label="Indicadores clave">
+      <article id="card-temp" class="kpi" aria-live="polite">
+        <div class="kpi-header">
+          <span class="kpi-title">Temperatura promedio</span>
+          <span id="temp-status" class="chip">--</span>
+        </div>
+        <div class="kpi-value">
+          <span id="avg-temperature">--</span><span class="kpi-unit">°C</span>
+        </div>
+        <div class="kpi-meta"><span>Mín 10°C · Máx 30°C</span></div>
+      </article>
+
+      <article id="card-hum" class="kpi" aria-live="polite">
+        <div class="kpi-header">
+          <span class="kpi-title">Humedad promedio</span>
+          <span id="hum-status" class="chip">--</span>
+        </div>
+        <div class="kpi-value">
+          <span id="avg-humidity">--</span><span class="kpi-unit">%</span>
+        </div>
+        <div class="kpi-meta"><span>Mín 30% · Máx 75%</span></div>
+      </article>
+    </section>
+
+    <!-- Gráficas -->
+    <section class="cards" aria-label="Gráficas">
+      <article class="card">
+        <div class="card-header">
+          <h2>Temperatura (°C)</h2>
+          <span id="last-update" class="muted">—</span>
+        </div>
+        <canvas id="temperatureChart" height="160"></canvas>
+      </article>
+
+      <article class="card">
+        <div class="card-header">
+          <h2>Humedad (%)</h2>
+          <span class="muted">Rangos operativos 30–75%</span>
+        </div>
+        <canvas id="humidityChart" height="160"></canvas>
+      </article>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <span>&copy; Argmand Inc 2025</span>
+    <span id="clock">--/--/---- --:--:--</span>
+  </footer>
+
+  <!-- Tu lógica específica de este sensor -->
+  <script src="scripts_sensor6.js"></script>
+
+  <!-- Pequeño pegamento para los botones de rango / refresco y reloj -->
+  <script>
+    // Botones de rango (si tu scripts_sensor6.js ya gestiona rango, quita esto)
+    document.querySelectorAll('.segmented-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        document.querySelectorAll('.segmented-btn').forEach(b=>{
+          b.classList.remove('active'); b.setAttribute('aria-pressed','false');
+        });
+        btn.classList.add('active'); btn.setAttribute('aria-pressed','true');
+        const minutes = parseInt(btn.dataset.range,10);
+        if (window.setRangeMinutes) window.setRangeMinutes(minutes); // función opcional en tu scripts_sensor6.js
+        if (window.loadAndRender) window.loadAndRender();            // idem
+      });
+    });
+
+    const btnRefresh = document.getElementById('btnRefresh');
+    if (btnRefresh) btnRefresh.addEventListener('click', ()=> {
+      if (window.loadAndRender) window.loadAndRender();
+    });
+
+    // Reloj de footer
+    function updateClock(){
+      const el = document.getElementById('clock');
+      const now = new Date();
+      el.textContent = `${now.toLocaleDateString('es-MX')}  ${now.toLocaleTimeString('es-MX', {hour12:false})}`;
+    }
+    updateClock(); setInterval(updateClock, 1000);
+  </script>
+</body>
+</html>

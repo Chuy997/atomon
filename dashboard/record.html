@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Descargar Reportes</title>
+    <link rel="stylesheet" href="rep.css"> <!-- Si tienes un archivo CSS para estilos -->
+</head>
+<body>
+    <div class="container">
+        <h1>Descargar Reportes de Sensor</h1>
+        <form action="download_report.php" method="GET">
+            <label for="start_date">Fecha de inicio:</label>
+            <input type="date" id="start_date" name="start_date" required>
+
+            <label for="end_date">Fecha de fin:</label>
+            <input type="date" id="end_date" name="end_date" required>
+
+            <button type="submit">Generar Reporte</button>
+        </form>
+    </div>
+</body>
+</html>

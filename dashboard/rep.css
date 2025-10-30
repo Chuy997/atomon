@@ -1,0 +1,100 @@
+/* Estilos generales */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Fondo de la página */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #e6ecf3;  /* Un fondo muy suave y profesional */
+    color: #2c3e50;  /* Color gris oscuro para el texto */
+    line-height: 1.6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Contenedor principal */
+.container {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+}
+
+/* Títulos */
+h1 {
+    font-size: 26px;
+    color: #34495e; /* Un gris más oscuro para títulos */
+    margin-bottom: 30px;
+    font-weight: 600;
+}
+
+/* Formulario */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Etiquetas de los campos */
+label {
+    text-align: left;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #7f8c8d;  /* Gris medio para las etiquetas */
+}
+
+/* Campos de entrada */
+input[type="date"] {
+    padding: 12px;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 25px;
+    background-color: #f8f9fa;
+    transition: all 0.3s ease;
+}
+
+/* Cambio de color del campo de fecha al estar en foco */
+input[type="date"]:focus {
+    border-color: #3498db;  /* Azul claro para el foco */
+    outline: none;
+    background-color: #fff;
+}
+
+/* Botón */
+button {
+    padding: 12px 20px;
+    font-size: 16px;
+    background-color: #3498db;  /* Azul empresarial */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Cambio de color del botón al pasar el ratón */
+button:hover {
+    background-color: #2980b9;  /* Azul más oscuro para el hover */
+}
+
+/* Mensajes de error o éxito */
+.message {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #e74c3c;  /* Rojo para mensajes de error */
+}
+
+/* Estilo de borde para el formulario */
+form {
+    border-top: 4px solid #3498db;
+    padding-top: 20px;
+}

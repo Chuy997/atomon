@@ -1,0 +1,80 @@
+date/time         : 2025-05-15, 09:43:31, 113ms
+computer name     : TEST
+wts client name   : ZL0202342
+user name         : JMURO
+registered owner  : Test
+operating system  : Windows NT New x64 build 9200
+system language   : English
+system up time    : 18 hours 21 minutes
+program up time   : 13 seconds
+processors        : 4x Intel(R) Core(TM) i5-7500 CPU @ 3.40GHz
+physical memory   : 5891/12179 MB (free/total)
+free disk space   : (C:) 110.26 GB
+display mode      : 1920x1200, 32 bit
+process id        : $3318
+allocated memory  : 27.59 MB
+command line      : "C:\xampp\sendmail\sendmail.exe" -t
+executable        : sendmail.exe
+exec. date/time   : 2012-04-16 11:30
+compiled with     : Delphi 2006/07
+madExcept version : 3.0l
+callstack crc     : $524b9ad3, $91b672ba, $91b672ba
+exception number  : 1
+exception class   : EIdConnectTimeout
+exception message : Connect timed out.
+
+main thread ($1b30):
+0041fa42 +000e sendmail.exe IdException                    112   +1 EIdException.Toss
+0044092e +014e sendmail.exe IdIOHandlerStack               279  +38 DoConnectTimeout
+00440b4c +01d8 sendmail.exe IdIOHandlerStack               346  +55 TIdIOHandlerStack.ConnectClient
+0046554d +0031 sendmail.exe IdSSLOpenSSL                  2086   +8 TIdSSLIOHandlerSocketOpenSSL.ConnectClient
+00444a9f +0063 sendmail.exe IdIOHandlerSocket              335  +13 TIdIOHandlerSocket.Open
+00465637 +0007 sendmail.exe IdSSLOpenSSL                  2122   +1 TIdSSLIOHandlerSocketOpenSSL.Open
+0044157d +0235 sendmail.exe IdTCPClient                    318  +53 TIdTCPClientCustom.Connect
+00445cc8 +00a4 sendmail.exe IdExplicitTLSClientServerBase  257  +23 TIdExplicitTLSClient.Connect
+0045ab7b +0017 sendmail.exe IdSMTP                         373   +2 TIdSMTP.Connect
+004b5f14 +1060 sendmail.exe sendmail                       808 +326 initialization
+761f5d47 +0017 KERNEL32.DLL                                         BaseThreadInitThunk
+
+thread $2c64:
+761f5d47 +17 KERNEL32.DLL  BaseThreadInitThunk
+
+thread $1ba0:
+761f5d47 +17 KERNEL32.DLL  BaseThreadInitThunk
+
+thread $16f4:
+761f5d47 +17 KERNEL32.DLL  BaseThreadInitThunk
+
+stack dump:
+0019fcb0  47 fa 41 00 de fa ed 0e - 01 00 00 00 07 00 00 00  G.A.............
+0019fcc0  c4 fc 19 00 47 fa 41 00 - e0 51 66 02 34 b0 43 00  ....G.A..Qf.4.C.
+0019fcd0  08 b1 67 02 48 fd 19 00 - 14 fd 19 00 e0 fc 19 00  ..g.H...........
+0019fce0  7d 00 00 00 00 00 00 00 - 33 09 44 00 f8 fc 19 00  }.......3.D.....
+0019fcf0  c8 4b 40 00 14 fd 19 00 - 20 fd 19 00 c8 4b 40 00  .K@..........K@.
+0019fd00  14 fd 19 00 4b 02 00 00 - 00 00 00 00 00 00 00 00  ....K...........
+0019fd10  30 41 62 02 4c fd 19 00 - 51 0b 44 00 4c fd 19 00  0Ab.L...Q.D.L...
+0019fd20  54 fd 19 00 c8 4b 40 00 - 4c fd 19 00 b4 4e 4b 00  T....K@.L....NK.
+0019fd30  e0 67 60 02 e0 67 60 02 - 90 69 65 02 00 00 00 00  .g`..g`..ie.....
+0019fd40  00 00 00 00 00 00 00 00 - e0 67 60 02 68 fd 19 00  .........g`.h...
+0019fd50  52 55 46 00 7c fd 19 00 - c8 4b 40 00 68 fd 19 00  RUF.|....K@.h...
+0019fd60  b4 4e 4b 01 e0 67 60 02 - b0 fd 19 00 a5 4a 44 00  .NK..g`......JD.
+0019fd70  e0 67 60 02 3c 56 46 00 - 83 15 44 00 88 fd 19 00  .g`.<VF...D.....
+0019fd80  5f 4d 40 00 b0 fd 19 00 - dc fd 19 00 c8 4b 40 00  _M@..........K@.
+0019fd90  b0 fd 19 00 b4 4e 4b 00 - e0 67 60 02 80 66 60 02  .....NK..g`..f`.
+0019fda0  12 57 46 00 e0 67 60 02 - 00 00 00 00 80 66 60 02  .WF..g`......f`.
+0019fdb0  d4 fd 19 00 cd 5c 44 00 - b4 4e 4b 00 00 00 00 00  .....\D..NK.....
+0019fdc0  80 ab 45 00 b4 4e 4b 00 - b4 4e 4b 00 00 00 00 00  ..E..NK..NK.....
+0019fdd0  80 66 60 02 74 ff 19 00 - 1a 5f 4b 00 e8 fd 19 00  .f`.t...._K.....
+0019fde0  c8 4b 40 00 74 ff 19 00 - f4 fd 19 00 c8 4b 40 00  .K@.t........K@.
+
+disassembling:
+[...]
+0041fa38       mov     ebx, eax
+0041fa3a 112   mov     ecx, esi
+0041fa3c       mov     dl, 1
+0041fa3e       mov     eax, ebx
+0041fa40       call    dword ptr [eax]
+0041fa42     > call    -$1ad5b ($404cec)      ; System.@RaiseExcept
+0041fa47 113   pop     esi
+0041fa48       pop     ebx
+0041fa49       ret

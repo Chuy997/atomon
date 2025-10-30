@@ -1,0 +1,141 @@
+:root{
+  --bg: #0f1115;
+  --surface: #151821;
+  --surface-2: #1a1f2b;
+  --text: #d7d9df;
+  --muted: #9aa1af;
+  --brand: #7aa2ff;
+  --ok: #25b36a;
+  --warn: #f0b429;
+  --bad: #e0565b;
+  --ring: rgba(122,162,255,.35);
+  --shadow: 0 10px 30px rgba(0,0,0,.35);
+  --radius: 14px;
+  --footer-h: 56px; /* altura reservada para el footer fijo */
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  /* Fondo base sobrio (fallback) */
+  background:
+    radial-gradient(1200px 800px at 80% -10%, #1a2030 0%, #0f1115 55%) no-repeat,
+    var(--bg);
+  color:var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+
+  /* Reserva espacio para que el footer fijo no tape el contenido */
+  padding-bottom: var(--footer-h);
+}
+
+/* ===== Fondos dinámicos por estado ===== */
+/* Usa tus imágenes existentes en /var/www/html/atomon/css/ */
+body.green{
+  background:
+    url('../css/fondo_verde.png') center/cover no-repeat fixed,
+    var(--bg);
+}
+body.yellow{
+  background:
+    url('../css/fondo_amarillo.png') center/cover no-repeat fixed,
+    var(--bg);
+}
+body.red{
+  background:
+    url('../css/fondo_rojo.png') center/cover no-repeat fixed,
+    var(--bg);
+}
+
+/* ===== App bar ===== */
+.appbar{
+  position:sticky; top:0; z-index:10;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px 18px;
+  background:linear-gradient(180deg, rgba(15,17,21,.85), rgba(15,17,21,.65));
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px); /* Safari */
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.brand{display:flex; align-items:center; gap:10px; font-weight:600}
+.brand .dot{width:10px;height:10px;border-radius:50%;background:var(--brand); box-shadow:0 0 12px var(--brand)}
+.brand .title{letter-spacing:.2px}
+.actions{display:flex; align-items:center; gap:10px}
+.btn.icon{
+  border:1px solid rgba(255,255,255,.08); color:var(--text); background:var(--surface-2);
+  width:36px; height:36px; display:grid; place-items:center; border-radius:10px; cursor:pointer;
+}
+.btn.icon:hover{border-color:var(--ring); box-shadow:0 0 0 3px var(--ring) inset}
+
+/* Segmented control */
+.segmented{
+  display:flex; background:var(--surface-2); padding:4px; border-radius:12px;
+  border:1px solid rgba(255,255,255,.08)
+}
+.segmented-btn{
+  appearance:none; border:0; color:var(--text); background:transparent;
+  padding:8px 12px; border-radius:8px; cursor:pointer;
+}
+.segmented-btn.active{
+  background:var(--surface);
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,.06)
+}
+
+/* ===== Layout ===== */
+.page{max-width:1200px; margin:22px auto; padding:0 16px}
+.kpis{
+  display:grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
+  gap:16px; margin-bottom:16px;
+}
+.cards{
+  display:grid; grid-template-columns: repeat(auto-fit, minmax(320px,1fr));
+  gap:16px
+}
+
+/* ===== KPI cards ===== */
+.kpi{
+  background: linear-gradient(180deg, rgba(26,31,43,.9), rgba(20,24,34,.9));
+  border:1px solid rgba(255,255,255,.06); border-radius:var(--radius); padding:16px;
+  box-shadow: var(--shadow);
+}
+.kpi-header{display:flex; align-items:center; justify-content:space-between; margin-bottom:8px}
+.kpi-title{font-weight:600}
+.kpi-value{font-size:42px; line-height:1; font-weight:700; letter-spacing:.3px}
+.kpi-unit{font-size:22px; margin-left:6px; color:var(--muted)}
+.kpi-meta{margin-top:8px; color:var(--muted); font-size:.95rem}
+
+.chip{
+  display:inline-flex; align-items:center; gap:6px; padding:4px 10px; border-radius:999px;
+  background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.08); color:var(--text); font-size:.9rem;
+}
+.chip.ok{background: rgba(37,179,106,.14); border-color: rgba(37,179,106,.35)}
+.chip.warn{background: rgba(240,180,41,.14); border-color: rgba(240,180,41,.35)}
+.chip.bad{background: rgba(224,86,91,.14); border-color: rgba(224,86,91,.35)}
+
+/* ===== Chart cards ===== */
+.card{
+  background: linear-gradient(180deg, rgba(26,31,43,.85), rgba(20,24,34,.85));
+  border:1px solid rgba(255,255,255,.06); border-radius:var(--radius); padding:16px; box-shadow: var(--shadow);
+}
+.card-header{display:flex; align-items:center; justify-content:space-between; margin-bottom:12px}
+.card h2{font-size:1.05rem; margin:0}
+.muted{color:var(--muted); font-size:.9rem}
+
+/* ===== Footer (fijo al fondo de la pantalla) ===== */
+.footer{
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
+  margin: 0 auto; padding:8px 16px; max-width:1200px; color:var(--muted);
+  display:flex; align-items:center; justify-content:space-between; font-size:.92rem;
+  border-top:1px dashed rgba(255,255,255,.08);
+  /* altura usada para reservar espacio en body */
+  min-height: var(--footer-h);
+}
+
+/* ===== Chart.js defaults ===== */
+canvas{max-width:100%; height:auto}
+
+/* ===== Responsive ===== */
+@media (max-width:560px){
+  .kpi-value{font-size:34px}
+  .kpi-unit{font-size:18px}
+}

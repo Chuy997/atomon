@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Sensores</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Incluir Chart.js -->
+    <script src="libs/Chart.min.js"></script>
+</head>
+<body>
+    <div class="rain-container"></div>
+    <div class="container">
+        <h1>Monitor de Temperatura y Humedad</h1>
+        
+        <section class="averages">
+            <div id="avg-temp-card" class="average-card green">
+                <h2>Temperatura Promedio</h2>
+                <p id="avg-temperature">-- °C</p>
+            </div>
+            <div id="avg-humidity-card" class="average-card green">
+                <h2>Humedad Promedio</h2>
+                <p id="avg-humidity">-- %</p>
+            </div>
+        </section>
+    </div>
+
+    <section class="charts-container">        
+        <div class="charts">
+            <div class="chart-container">
+                <h2>Temperatura (°C)</h2>
+                <canvas id="temperatureChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <h2>Humedad (%)</h2>
+                <canvas id="humidityChart"></canvas>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-left">
+            <p>&copy; Argmand Inc 2025</p>
+        </div>
+        <div class="footer-right">
+            <p id="clock"></p> <!-- Reloj Digital -->
+        </div>
+    </footer>
+    
+    <script src="scripts.js"></script>
+
+    <script>
+        // Función para actualizar el reloj
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const date = now.toLocaleDateString('es-ES'); // Formato de fecha
+
+            // Mostrar reloj y fecha
+            document.getElementById("clock").innerHTML = `${date} | ${hours}:${minutes}:${seconds}`;
+        }
+
+        // Llamar a la función de actualización cada segundo
+        setInterval(updateClock, 1000);
+
+        // Llamar una vez al inicio para mostrar la hora inmediatamente
+        updateClock();
+    </script>
+</body>
+</html>

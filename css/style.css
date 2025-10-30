@@ -1,0 +1,103 @@
+/* style.css */
+
+body {
+    background-color: #121212;
+    color: #ffffff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    padding: 20px;
+    max-width: 1400px; /* Aumentado para acomodar mejor las gráficas */
+    margin: 0 auto;
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 40px;
+}
+
+.averages {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+}
+
+.average-card {
+    background-color: #1e1e1e;
+    padding: 20px;
+    border-radius: 10px;
+    width: 220px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    transition: background-color 0.3s ease;
+}
+
+.average-card.green {
+    background-color: #28a745; /* Verde */
+}
+
+.average-card.yellow {
+    background-color: #ffc107; /* Amarillo */
+}
+
+.average-card.red {
+    background-color: #dc3545; /* Rojo */
+}
+
+.average-card h2 {
+    margin-bottom: 10px;
+    font-size: 1.2em;
+}
+
+.average-card p {
+    font-size: 2em;
+    margin: 0;
+}
+
+/* Contenedor de las gráficas en una fila */
+.charts {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    flex-wrap: wrap; /* Permite que las gráficas se ajusten en pantallas pequeñas */
+}
+
+.chart-container {
+    flex: 1 1 45%; /* Permite que cada gráfica ocupe aproximadamente el 45% del contenedor */
+    background-color: #1e1e1e;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+}
+
+.chart-container:hover {
+    transform: scale(1.02); /* Efecto de hover para mejorar la UX */
+}
+
+.chart-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+canvas {
+    width: 100% !important;
+    height: auto !important;
+}
+
+/* Responsividad para pantallas pequeñas */
+@media (max-width: 900px) {
+    .charts {
+        flex-direction: column; /* Apila las gráficas verticalmente en pantallas pequeñas */
+        align-items: center;
+    }
+    .chart-container {
+        flex: 1 1 90%; /* Las gráficas ocupan el 90% del ancho en pantallas pequeñas */
+    }
+}
