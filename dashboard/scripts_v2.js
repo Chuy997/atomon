@@ -40,6 +40,7 @@ function updateClock(){
 // ===== Data fetch + render =====
 async function loadAndRender(){
   try{
+    loadSensorConfig(); // Refresh sensor states and muted buttons
     const res = await fetch('../get_data.php');
     const json = await res.json();
     if(json.status !== 'success'){
@@ -305,3 +306,56 @@ function fmtDateTime(ts){
   return `${date} ${time}`;
 }
 const round2 = n => Math.round(n * 100) / 100;
+
+// ===== Interfaz de Mute de Sensores y Desconexión =====
+async function loadSensorConfig() {
+  try {
+    const res = await fetch('get_sensor_config.php');
+    if(!res.ok) return;
+    const data = await res.json();
+    renderSensorStatus(data);
+  } catch(e) { console.error('Error fetching sensor config', e); }
+}
+
+function renderSensorStatus(data) {
+  const grid = document.getElementById('sensor-status-grid');
+  if(!grid) return;
+  grid.innerHTML = '';
+  data.forEach(s => {
+    const tglId = `mute-s${s.sensor_id}`;
+    const div = document.createElement('div');
+    div.className = `sensor-pill ${s.is_down ? 'offline' : ''}`;
+    div.innerHTML = `
+      <div class="sensor-pill-header">
+        <span class="sensor-name">Sensor ${s.sensor_id} ${s.sensor_id == 6 ? '<span style="font-size:11px;font-weight:normal;opacity:0.7">(Sin correo)</span>' : ''}</span>
+        <div class="sensor-indicator ${s.is_down ? 'offline' : ''}" title="${s.is_down ? 'Desconectado (>20m)' : 'En línea'}"></div>
+      </div>
+      <div class="sensor-mute-row">
+        <span>Silenciar Alerta</span>
+        <label class="switch">
+          <input type="checkbox" id="${tglId}" ${s.alerts_muted == 1 ? 'checked' : ''} onchange="toggleMute(${s.sensor_id}, this.checked)">
+          <span class="slider"></span>
+        </label>
+      </div>
+    `;
+    grid.appendChild(div);
+  });
+}
+
+window.toggleMute = async function(sensorId, isMuted) {
+  try {
+    const res = await fetch('toggle_sensor_mute.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({sensor_id: sensorId, alerts_muted: isMuted ? 1 : 0})
+    });
+    const parsed = await res.json();
+    if(parsed.success) {
+      console.log('Mute config up to date');
+    } else {
+      alert("Error guardando config: " + (parsed.message || ""));
+    }
+  } catch(e) {
+    console.error('Error toggling mute', e);
+  }
+}

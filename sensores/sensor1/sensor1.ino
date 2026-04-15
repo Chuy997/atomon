@@ -17,22 +17,31 @@ const int sensor_id = 5;
 // Instancia del sensor AM2315C
 AM2315C am2315c;
 
-// Variable para medir el tiempo
+// Variables para medir el tiempo (usando millis para no bloquear)
 unsigned long startMillis;
+unsigned long lastReadMillis = 0; 
 const unsigned long resetInterval = 25 * 60 * 1000; // 25 minutos en milisegundos
+const unsigned long readInterval = 2 * 60 * 1000;   // 2 minutos en milisegundos
 
 void setup() {
   Serial.begin(115200);
 
-  // Inicia el temporizador
+  // Inicia el temporizador de reinicio
   startMillis = millis();
 
-  // Conexión al WiFi
+  // Conexión al WiFi con timeout para evitar bucle infinito
   Serial.print("Conectando a WiFi");
   WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(1000);
+  int wifiAttempts = 0;
+  while (WiFi.status() != WL_CONNECTED && wifiAttempts < 20) {
+    delay(500);
     Serial.print(".");
+    wifiAttempts++;
+  }
+  
+  if (WiFi.status() != WL_CONNECTED) {
+    Serial.println("\nError: No se pudo conectar al WiFi en el inicio. Reiniciando...");
+    esp_restart();
   }
   Serial.println("\nConectado a WiFi");
 
@@ -42,61 +51,72 @@ void setup() {
   // Inicializar el sensor
   if (!am2315c.begin()) {
     Serial.println("No se encontró el sensor AM2315C. Verifica la conexión.");
-    while (1);
+    // En lugar de while(1) que cuelga el micro, mejor reiniciar e intentar nuevamente
+    delay(2000);
+    esp_restart();
   }
 }
 
 void loop() {
-  // Comprobar si han pasado 25 minutos para reiniciar
-  if (millis() - startMillis >= resetInterval) {
+  unsigned long currentMillis = millis();
+
+  // 1. Comprobar si han pasado 25 minutos para reiniciar por salud
+  if (currentMillis - startMillis >= resetInterval) {
     Serial.println("25 minutos transcurridos. Reiniciando...");
     esp_restart();
   }
 
-  // Leer temperatura y humedad
-  if (am2315c.read() == AM2315C_OK) {
-    float temperature = am2315c.getTemperature();
-    float humidity = am2315c.getHumidity();
-    Serial.print("Sensor ID: ");
-    Serial.println(sensor_id);
-    Serial.print("Temperatura: ");
-    Serial.print(temperature);
-    Serial.println(" °C");
-    Serial.print("Humedad: ");
-    Serial.print(humidity);
-    Serial.println(" %");
+  // 2. Ejecutar la lectura de los datos cada 2 minutos usando temporizador no bloqueante
+  if (currentMillis - lastReadMillis >= readInterval || lastReadMillis == 0) {
+    lastReadMillis = currentMillis; // Actualizar el tiempo de la última lectura
 
-    // Enviar datos al backend
-    if (WiFi.status() == WL_CONNECTED) {
-      HTTPClient http;
-      http.begin(serverUrl);
-      http.addHeader("Content-Type", "application/json");
-
-      // Crear el cuerpo del JSON con los datos
-      String jsonData = "{\"sensor_id\":" + String(sensor_id) +
-                        ",\"temperature\":" + String(temperature) +
-                        ",\"humidity\":" + String(humidity) + "}";
-
-      // Enviar el POST request
-      int httpResponseCode = http.POST(jsonData);
-
-      // Verificar la respuesta del servidor
-      if (httpResponseCode > 0) {
-        Serial.println("Datos enviados correctamente");
-        Serial.println(http.getString());
-      } else {
-        Serial.print("Error al enviar datos: ");
-        Serial.println(httpResponseCode);
-      }
-      http.end();
-    } else {
+    // Antes de procesar, verificar si sigue conectado y reconectar con timeout
+    if (WiFi.status() != WL_CONNECTED) {
       Serial.println("WiFi desconectado. Intentando reconectar...");
       WiFi.reconnect();
+      unsigned long reconnectStart = millis();
+      // Pequeña espera asíncrona de 5 segundos para darle oportunidad de conectarse
+      while (WiFi.status() != WL_CONNECTED && (millis() - reconnectStart) < 5000) {
+        delay(100);
+      }
     }
-  } else {
-    Serial.println("Error al leer el sensor.");
-  }
 
-  // Esperar 2 minutos antes de la próxima lectura
-  delay(120000);
+    // Leer temperatura y humedad
+    if (am2315c.read() == AM2315C_OK) {
+      float temperature = am2315c.getTemperature();
+      float humidity = am2315c.getHumidity();
+      
+      // Uso de printf para hacer el código más limpio y fácil de leer
+      Serial.printf("Sensor ID: %d\n", sensor_id);
+      Serial.printf("Temperatura: %.2f °C\n", temperature);
+      Serial.printf("Humedad: %.2f %%\n", humidity);
+
+      // Enviar datos al backend si hay conexión
+      if (WiFi.status() == WL_CONNECTED) {
+        HTTPClient http;
+        http.begin(serverUrl);
+        http.addHeader("Content-Type", "application/json");
+
+        // Usar un buffer estático (snprintf) es más amigable con la memoria de C++ que usar "String" concatenado
+        char jsonData[128];
+        snprintf(jsonData, sizeof(jsonData), "{\"sensor_id\":%d,\"temperature\":%.2f,\"humidity\":%.2f}", sensor_id, temperature, humidity);
+
+        // Enviar el POST request
+        int httpResponseCode = http.POST(jsonData);
+
+        // Verificar la respuesta del servidor
+        if (httpResponseCode > 0) {
+          Serial.println("Datos enviados correctamente");
+          Serial.println(http.getString());
+        } else {
+          Serial.printf("Error al enviar datos HTTP: %d\n", httpResponseCode);
+        }
+        http.end();
+      } else {
+        Serial.println("No se enviaron los datos porque el WiFi no se logró conectar.");
+      }
+    } else {
+      Serial.println("Error al leer el sensor AM2315C.");
+    }
+  }
 }
