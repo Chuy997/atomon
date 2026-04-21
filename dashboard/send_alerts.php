@@ -276,7 +276,7 @@ function checkAndSendAlerts(mysqli $conn): void {
                 $alertRecipients
             );
             $emailSent = true;
-        } elseif (($avgHum >= $humidityMin && $avgHum < 34) || ($avgHum > 65 && $avgHum <= $humidityMax)) {
+        } elseif (($avgHum >= $humidityMin && $avgHum < 34) || ($avgHum >= 71 && $avgHum <= $humidityMax)) {
             sendEmail(
                 'Aviso: Humedad Próxima a Salirse de Rango',
                 "Promedio de humedad (últimas 2 horas) {$avgHum}%, cercano a los límites ({$humidityMin}% - {$humidityMax}%).",
