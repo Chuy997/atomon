@@ -126,6 +126,8 @@ function sendEmail($subject, $body) {
         <!DOCTYPE html>
         <html lang='es'>
         <head>
+            <link rel="icon" type="image/png" href="/atomon/favicon.png?v=1">
+            <link rel="shortcut icon" type="image/png" href="/atomon/favicon.png?v=1">
             <meta charset='UTF-8'>
             <title>$subject</title>
             <style>

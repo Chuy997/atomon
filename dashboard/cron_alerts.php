@@ -46,6 +46,8 @@ function sendEmail(string $subject, string $body, array $recipients): void {
         <!DOCTYPE html>
         <html>
         <head>
+            <link rel="icon" type="image/png" href="/atomon/favicon.png?v=1">
+            <link rel="shortcut icon" type="image/png" href="/atomon/favicon.png?v=1">
             <meta charset='UTF-8'>
             <style>
                 body { font-family: -apple-system, sans-serif; background-color: #f1f5f9; padding: 40px 20px; margin: 0; }

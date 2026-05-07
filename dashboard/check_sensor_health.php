@@ -62,6 +62,8 @@ $totalMuted  = count(array_filter($sensors, fn($s) => $s['alerts_muted']));
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <link rel="icon" type="image/png" href="/atomon/favicon.png?v=1">
+  <link rel="shortcut icon" type="image/png" href="/atomon/favicon.png?v=1">
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ATOMON · Monitor de Sensores</title>
